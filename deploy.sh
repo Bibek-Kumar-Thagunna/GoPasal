@@ -55,11 +55,33 @@ if [ -d "GoPasal_Icon_Pack" ]; then
   cp -f GoPasal_Icon_Pack/favicon.ico apps/seller/dist/favicon.ico 2>/dev/null || true
 fi
 
-# 5. Rebuild and restart Admin Command Center Docker Container
-echo "🐳 Rebuilding Admin Web Docker container..."
-if [ -f "docker-compose.yml" ]; then
-  docker compose build --no-cache admin-web 2>/dev/null || true
-  docker compose up -d admin-web 2>/dev/null || true
+# 5. Start / Rebuild Admin Command Center (Next.js on Port 8083)
+echo "🛡️ Starting Admin Command Center (Port 8083)..."
+ADMIN_STARTED=false
+
+# Method A: Try Docker Compose
+if command -v docker &> /dev/null && [ -f "docker-compose.yml" ]; then
+  echo "🐳 Attempting Docker Compose for admin-web..."
+  docker compose build --no-cache admin-web || true
+  docker compose up -d admin-web || true
+  sleep 3
+fi
+
+# Method B: Fallback to PM2 / Node if port 8083 is not yet responding
+if ! curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8083 | grep -E "200|301|302|307|308|401|403" > /dev/null; then
+  echo "⚡ Starting Admin Web natively on Port 8083..."
+  cd apps/admin-web
+  npm install --prefer-offline 2>/dev/null || npm install
+  npm run build
+  if command -v pm2 &> /dev/null; then
+    pm2 delete gopasal-admin 2>/dev/null || true
+    pm2 start "npm run start" --name "gopasal-admin"
+    pm2 save 2>/dev/null || true
+  else
+    pkill -f "next start -p 8083" 2>/dev/null || true
+    nohup npm run start > /var/log/gopasal-admin.log 2>&1 &
+  fi
+  cd ../..
 fi
 
 # 6. Reload Nginx reverse proxy
@@ -68,7 +90,7 @@ systemctl reload nginx 2>/dev/null || nginx -s reload 2>/dev/null || true
 
 # 7. Restart background services if managed by systemd
 echo "🔄 Restarting application services..."
-systemctl restart gopasal-backend gopasal-customer gopasal-seller 2>/dev/null || true
+systemctl restart gopasal-backend gopasal-customer gopasal-seller gopasal-admin 2>/dev/null || true
 
 echo "================================================================="
 echo "✅ GoPasal Production Deployment Completed Successfully!"
