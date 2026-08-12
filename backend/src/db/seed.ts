@@ -18,7 +18,7 @@ import { generateId, hashPassword } from "@/utils";
 import { logger } from "@/utils";
 import { DEFAULT_ROLES } from "@/config";
 import { PLATFORM_PROMO_STORE_ID } from "@/config/commerce";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 const ROLE_DESCRIPTIONS: Record<string, string> = {
     SUPER_ADMIN:
