@@ -93,8 +93,6 @@ services:
     restart: unless-stopped
     ports:
       - "8083:8083"
-    depends_on:
-      - api
 
   # Automated nightly database backups (retained for 14 days).
   # Restore with:  docker compose exec -T postgres pg_restore -U postgres -d gopasal < dump
