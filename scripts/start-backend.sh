@@ -24,8 +24,14 @@ if command -v docker &> /dev/null && [ -f "../docker-compose.yml" ]; then
   echo "🐳 Ensuring Postgres and Redis are running on ports 5432 & 5433..."
   cd ..
   docker compose up -d postgres redis
+  sleep 3
+  # Sync PostgreSQL password and database for user 'postgres'
+  docker compose exec -T postgres psql -U postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';" 2>/dev/null || true
+  docker compose exec -T postgres psql -U postgres -c "CREATE DATABASE gopasal;" 2>/dev/null || true
+  docker compose exec -T postgres psql -U postgres -d gopasal -c "ALTER USER postgres WITH PASSWORD 'postgres';" 2>/dev/null || true
+  docker compose exec -T postgres psql -U postgres -d gopasal -c "CREATE EXTENSION IF NOT EXISTS vector;" 2>/dev/null || true
   cd backend
-  sleep 2
+  sleep 1
 fi
 
 # 3. Ensure database schema and initial seed are populated
