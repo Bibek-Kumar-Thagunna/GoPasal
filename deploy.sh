@@ -8,10 +8,10 @@ echo "🚀 Starting GoPasal Production Deployment..."
 
 # 1. Pull latest changes from GitHub
 if [ -d ".git" ]; then
-  echo "📥 Pulling latest code from GitHub (main)..."
-  git pull origin main || {
-    echo "⚠️ Git pull failed or branch diverged, continuing with local files..."
-  }
+  echo "📥 Syncing latest code from GitHub (main)..."
+  git config --global --add safe.directory /opt/gopasal 2>/dev/null || true
+  git fetch origin main 2>/dev/null || true
+  git reset --hard origin/main 2>/dev/null || true
 fi
 
 # 2. Distribute high-resolution branding and icon pack assets
