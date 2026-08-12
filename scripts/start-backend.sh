@@ -21,16 +21,16 @@ fi
 
 # 2. Check and start Database & Redis if using Docker Compose
 if command -v docker &> /dev/null && [ -f "../docker-compose.yml" ]; then
-  echo "🐳 Ensuring Postgres and Redis are running..."
+  echo "🐳 Ensuring Postgres and Redis are running on ports 5432 & 5433..."
   cd ..
-  docker compose up -d postgres redis 2>/dev/null || true
+  docker compose up -d postgres redis
   cd backend
+  sleep 2
 fi
 
 # 3. Ensure database schema and initial seed are populated
 echo "🗄️ Verifying Database Schema & Initial Data..."
 bunx drizzle-kit push --force || bunx drizzle-kit push || true
-bun run src/db/migrate.ts || true
 bun run src/db/seed.ts || true
 
 # 4. Kill any stale process on port 3000
