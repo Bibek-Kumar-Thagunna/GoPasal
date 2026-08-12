@@ -1,0 +1,73 @@
+# Example nginx reverse proxy for a single VPS (TLS via certbot)
+# Replace YOUR_DOMAIN with your hostname.
+
+upstream gopasal_api {
+    server 127.0.0.1:3000;
+}
+
+upstream gopasal_admin {
+    server 127.0.0.1:8083;
+}
+
+server {
+    listen 80;
+    server_name api.YOUR_DOMAIN admin.YOUR_DOMAIN shop.YOUR_DOMAIN;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    server_name api.YOUR_DOMAIN;
+
+    ssl_certificate     /etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem;
+
+    location / {
+        proxy_pass http://gopasal_api;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    server_name admin.YOUR_DOMAIN;
+
+    ssl_certificate     /etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem;
+
+    location / {
+        proxy_pass http://gopasal_admin;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+# Customer Expo web (static export) — serve from /var/www/gopasal-customer after: cd apps/customer && npm run build:web
+server {
+    listen 443 ssl http2;
+    server_name shop.YOUR_DOMAIN;
+
+    ssl_certificate     /etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem;
+
+    root /var/www/gopasal-customer;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

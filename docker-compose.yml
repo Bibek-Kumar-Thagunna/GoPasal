@@ -1,0 +1,124 @@
+# GoPasal — production stack
+#
+# Usage:
+#   cp backend/.env.example backend/.env        # fill real values
+#   export POSTGRES_PASSWORD=$(openssl rand -hex 16)
+#   export REDIS_PASSWORD=$(openssl rand -hex 16)
+#   docker compose up -d --build
+#
+# The API container refuses to boot in production with default secrets,
+# wildcard CORS, mock payment flags, or without REDIS_URL (see config/env.ts).
+
+services:
+  postgres:
+    build:
+      context: ./deploy/postgres
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: gopasal
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gopasal"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # No host port binding by default — the API reaches it via the network.
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:?set REDIS_PASSWORD}", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: "no"
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/gopasal
+      NODE_ENV: production
+    command: ["bun", "run", "src/db/migrate.ts"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/gopasal
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      NODE_ENV: production
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health > /dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  admin-web:
+    build:
+      context: ./apps/admin-web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3000/api/v1}
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID:-}
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    depends_on:
+      - api
+
+  # Automated nightly database backups (retained for 14 days).
+  # Restore with:  docker compose exec -T postgres pg_restore -U postgres -d gopasal < dump
+  backup:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: gopasal
+    volumes:
+      - backups:/backups
+    entrypoint: |
+      sh -c '
+        echo "0 2 * * * pg_dump -U postgres -d gopasal -Fc -f /backups/gopasal-$$(date +\%Y\%m\%d).dump && find /backups -name "gopasal-*.dump" -mtime +14 -delete" > /etc/crontabs/root
+        crond -f
+      '
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - default
+
+volumes:
+  pgdata:
+  redisdata:
+  backups:

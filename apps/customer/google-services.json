@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1081438042221",
+    "project_id": "gopasal-d5628",
+    "storage_bucket": "gopasal-d5628.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081438042221:android:5954d952c69bae2f16a764",
+        "android_client_info": {
+          "package_name": "com.gopasal.customer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIGHcsqhDKYiI9KWDEqemRqoCgTJT0_sc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

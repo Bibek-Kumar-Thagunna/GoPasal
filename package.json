@@ -1,0 +1,55 @@
+{
+  "name": "gopasal-monorepo",
+  "version": "2.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "cd apps/customer && npx expo start",
+    "dev:customer": "cd apps/customer && npx expo start --web",
+    "dev:seller": "cd apps/seller && npx expo start --web",
+    "dev:backend": "cd backend && bun run dev",
+    "dev:admin": "cd apps/admin-web && npm run dev",
+    "dev:admin:expo": "cd apps/admin && npx expo start --web",
+    "dev:delivery": "cd apps/delivery && npx expo start --web",
+    "dev:all": "concurrently -n backend,seller -c blue,green \"npm run dev:backend\" \"npm run dev:seller\"",
+    "dev:stack": "bash ./dev.sh",
+    "dev:stack:core": "GOPASAL_DEV_CORE_ONLY=1 bash ./dev.sh",
+    "dev:stack:no-admin": "GOPASAL_DEV_NO_ADMIN=1 bash ./dev.sh",
+    "build:web": "cd apps/customer && npx expo export --platform web",
+    "build:ios": "cd apps/customer && npx eas build --platform ios",
+    "build:android": "cd apps/customer && npx eas build --platform android",
+    "test:e2e:seller": "playwright test -c e2e/playwright.seller.config.ts",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@types/babel__generator": "^7.27.0",
+    "concurrently": "^9.1.2",
+    "typescript": "^5.3.3"
+  },
+  "overrides": {
+    "react-native": "0.81.5",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native-reanimated": "~4.1.1",
+    "semver": "^7.8.0"
+  },
+  "resolutions": {
+    "react-native": "0.81.5",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native-reanimated": "~4.1.1",
+    "semver": "^7.8.0"
+  },
+  "dependencies": {
+    "expo": "~54.0.35",
+    "expo-router": "~6.0.24",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-worklets": "^0.8.0"
+  }
+}

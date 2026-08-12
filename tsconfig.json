@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {},
+  "references": [
+    {
+      "path": "./apps/customer"
+    }
+  ],
+  "files": [],
+  "extends": "expo/tsconfig.base"
+}

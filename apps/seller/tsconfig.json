@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@gopasal/ui": ["../../packages/gopasal-ui/src/index.ts"],
+      "@gopasal/ui/*": ["../../packages/gopasal-ui/src/*"]
+    }
+  },
+  "extends": "expo/tsconfig.base",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
+}

@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gp-bg: #070818;
+  --gp-deep: #0a0b1e;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  @apply min-h-screen bg-gp-navy font-sans text-white antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+input,
+textarea,
+select,
+[contenteditable='true'],
+[data-selectable='true'] {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+.bg-grain::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  opacity: 0.05;
+  z-index: 1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.55) 0.6px, transparent 0.7px);
+  background-size: 5px 5px;
+}
+
+.glass-panel {
+  @apply border border-white/10 backdrop-blur-xl;
+  background-color: rgba(12, 14, 35, 0.72);
+  box-shadow:
+    0 0 40px rgba(56, 189, 248, 0.12),
+    0 25px 50px rgba(0, 0, 0, 0.35);
+}
+
+.glass-input {
+  @apply rounded-lg border border-white/15 bg-black/35 text-white outline-none placeholder:text-white/35 focus:border-sky-400/50 focus:ring-1 focus:ring-sky-400/40;
+}
+
+/* Admin typography — page titles, sections, supporting copy */
+.admin-heading-page {
+  @apply font-display text-[1.75rem] font-bold leading-snug tracking-tight text-white sm:text-[2.125rem];
+}
+
+.admin-heading-section {
+  @apply font-display text-[17px] font-semibold leading-snug tracking-tight text-white sm:text-[18px];
+}
+
+.admin-heading-micro {
+  @apply text-[12px] font-semibold uppercase tracking-[0.16em];
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.admin-copy-lead {
+  @apply text-[14.5px] font-normal leading-[1.7];
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.admin-copy-muted {
+  @apply text-[13px] font-normal leading-relaxed;
+  color: rgba(255, 255, 255, 0.46);
+}
+
+/* Data tables — comfortable, professional density */
+.admin-table-cell {
+  @apply px-5 py-4 text-[14px] leading-snug;
+}
+
+.admin-table-head {
+  @apply px-5 py-4 text-[12px] font-semibold uppercase tracking-[0.12em];
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.overflow-admin-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.overflow-admin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+.overflow-admin-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 200;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #0ea5e9;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 16px;
+}
+
+*:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}

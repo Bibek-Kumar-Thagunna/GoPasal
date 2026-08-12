@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "GoPasal Seller",
+    "slug": "gopasal-seller",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "scheme": "gopasal-seller",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": { "backgroundColor": "#4a4e8a", "resizeMode": "contain" },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gopasal.seller"
+    },
+    "android": {
+      "package": "com.gopasal.seller",
+      "adaptiveIcon": { "backgroundColor": "#4a4e8a" }
+    },
+    "web": { "bundler": "metro", "output": "static", "favicon": "./assets/favicon.png" },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-font",
+      ["expo-splash-screen", { "backgroundColor": "#4a4e8a" }],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "GoPasal Seller uses your location to pin your shop for customer delivery."
+        }
+      ]
+    ],
+    "experiments": { "typedRoutes": true },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "49938767-3a2d-40e1-b1e5-4725e3d6471c"
+      }
+    }
+  }
+}

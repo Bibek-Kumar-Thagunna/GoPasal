@@ -1,0 +1,61 @@
+# Firebase Admin SDK service account keys (NEVER commit)
+apps/customer/*adminsdk*.json
+**/gopasal-*-firebase-adminsdk-*.json
+*firebase-adminsdk*.json
+*.service_account.json
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+
+# Env files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+!.env.example
+!.env.staging.example
+!.env.production.example
+
+# ─── Dependencies ────────────────────────────────────────────
+node_modules/
+
+# ─── Build outputs ───────────────────────────────────────────
+dist/
+build/
+.next/
+out/
+.expo/
+*.tsbuildinfo
+web-build/
+
+# Native builds
+apps/customer/android/app/build/
+apps/customer/android/.gradle/
+apps/customer/ios/Pods/
+apps/customer/ios/build/
+
+# ─── Runtime data / logs ─────────────────────────────────────
+backend/uploads/
+backend/*.db
+backend/*.sqlite*
+*.log
+err.log
+
+# ─── Editor / OS ─────────────────────────────────────────────
+.DS_Store
+*.swp
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# ─── Temp leftovers from debugging sessions ─────────────────
+temp_install*/
+temp_reanim/
+package-lock.json.bak
+test-cart.js
+test-*.ts
+test-*.js
+test-*.sh

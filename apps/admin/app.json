@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "GoPasal Admin",
+    "slug": "gopasal-admin",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "scheme": "gopasal-admin",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": { "backgroundColor": "#1a1f3a", "resizeMode": "contain" },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gopasal.admin"
+    },
+    "android": {
+      "package": "com.gopasal.admin",
+      "adaptiveIcon": { "backgroundColor": "#1a1f3a" }
+    },
+    "web": { "bundler": "metro", "output": "static", "favicon": "./assets/favicon.png" },
+    "plugins": ["expo-router", "expo-secure-store", "expo-font", ["expo-splash-screen", { "backgroundColor": "#1a1f3a" }]],
+    "experiments": { "typedRoutes": true }
+  }
+}

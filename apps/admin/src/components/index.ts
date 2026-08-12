@@ -1,0 +1,1 @@
+export { GText } from './GText';
