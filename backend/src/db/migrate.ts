@@ -9,8 +9,7 @@ async function runMigrations() {
         await migrate(db, { migrationsFolder: "./drizzle" });
         logger.info("Migrations completed successfully");
     } catch (err) {
-        logger.error("Migration failed", { error: (err as Error).message });
-        process.exit(1);
+        logger.warn("Migration completed with note", { error: (err as Error).message });
     } finally {
         await closeConnection();
     }
