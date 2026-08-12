@@ -27,8 +27,9 @@ if command -v docker &> /dev/null && [ -f "../docker-compose.yml" ]; then
   cd backend
 fi
 
-# 3. Ensure database migrations and initial seed are populated
+# 3. Ensure database schema and initial seed are populated
 echo "🗄️ Verifying Database Schema & Initial Data..."
+bunx drizzle-kit push --force || bunx drizzle-kit push || true
 bun run src/db/migrate.ts || true
 bun run src/db/seed.ts || true
 
