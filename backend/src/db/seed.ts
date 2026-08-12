@@ -414,13 +414,13 @@ async function seed() {
 
         const adminEmail = "admin@gopasal.com";
         const adminPhone = "9800000099";
+        const hashedAdminPassword = await hashPassword("pass1234");
         let [adminUser] = await db
             .select()
             .from(users)
             .where(eq(users.email, adminEmail));
 
         if (!adminUser) {
-            const hashedAdminPassword = await hashPassword("pass1234");
             const adminId = generateId();
             [adminUser] = await db
                 .insert(users)
@@ -433,13 +433,31 @@ async function seed() {
                     isPhoneVerified: true,
                 })
                 .returning();
-            logger.info("Created platform super admin (dev credentials in seed script comments)");
+            logger.info("Created platform super admin");
+        } else {
+            await db
+                .update(users)
+                .set({ passwordHash: hashedAdminPassword, isPhoneVerified: true })
+                .where(eq(users.id, adminUser.id));
+            logger.info("Updated platform super admin credentials");
+        }
 
-            if (roleMap["SUPER_ADMIN"]) {
+        if (roleMap["SUPER_ADMIN"]) {
+            const [existingAdminRole] = await db
+                .select()
+                .from(userRoles)
+                .where(
+                    and(
+                        eq(userRoles.userId, adminUser.id),
+                        eq(userRoles.roleId, roleMap["SUPER_ADMIN"])
+                    )
+                );
+            if (!existingAdminRole) {
                 await db.insert(userRoles).values({
                     userId: adminUser.id,
                     roleId: roleMap["SUPER_ADMIN"],
                 });
+                logger.info("Assigned SUPER_ADMIN role to admin user");
             }
         }
 

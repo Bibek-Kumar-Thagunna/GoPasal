@@ -29,8 +29,8 @@ fi
 
 # 3. Ensure database migrations and initial seed are populated
 echo "🗄️ Verifying Database Schema & Initial Data..."
-bun run src/db/migrate.ts 2>/dev/null || true
-bun run src/db/seed.ts 2>/dev/null || true
+bun run src/db/migrate.ts || true
+bun run src/db/seed.ts || true
 
 # 4. Kill any stale process on port 3000
 echo "🧹 Cleaning up port 3000..."
