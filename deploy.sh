@@ -57,13 +57,21 @@ fi
 
 # 5. Start / Rebuild Admin Command Center (Next.js on Port 8083)
 echo "🛡️ Starting Admin Command Center (Port 8083)..."
-ADMIN_STARTED=false
+
+# Free port 8083 from old process to avoid bind conflicts
+fuser -k 8083/tcp 2>/dev/null || true
+pkill -f "next start -p 8083" 2>/dev/null || true
+if command -v pm2 &> /dev/null; then
+  pm2 stop gopasal-admin 2>/dev/null || true
+fi
 
 # Method A: Try Docker Compose
 if command -v docker &> /dev/null && [ -f "docker-compose.yml" ]; then
-  echo "🐳 Attempting Docker Compose for admin-web..."
-  docker compose build --no-cache admin-web || true
-  docker compose up -d admin-web || true
+  echo "🐳 Rebuilding and starting Admin Web Docker container..."
+  docker compose stop admin-web 2>/dev/null || true
+  docker compose rm -f admin-web 2>/dev/null || true
+  docker compose build --no-cache admin-web
+  docker compose up -d admin-web
   sleep 3
 fi
 
