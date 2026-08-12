@@ -57,28 +57,14 @@ fi
 
 # 5. Start / Rebuild GoPasal Backend API (Port 3000)
 echo "⚡ Ensuring Backend API (Port 3000) is running..."
-if command -v docker &> /dev/null && [ -f "docker-compose.yml" ]; then
+if [ -f "scripts/start-backend.sh" ]; then
+  chmod +x scripts/start-backend.sh
+  ./scripts/start-backend.sh
+elif command -v docker &> /dev/null && [ -f "docker-compose.yml" ]; then
   echo "🐳 Starting Postgres, Redis and Backend API with Docker Compose..."
   docker compose up -d postgres redis
   docker compose build api 2>/dev/null || true
   docker compose up -d api 2>/dev/null || true
-  sleep 3
-fi
-
-# Fallback: Start native Bun backend if port 3000 is not responding
-if ! curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000/health | grep -E "200|301|302|404" > /dev/null; then
-  echo "⚡ Starting Backend API natively with Bun on Port 3000..."
-  cd backend
-  if command -v pm2 &> /dev/null; then
-    pm2 delete gopasal-backend 2>/dev/null || true
-    pm2 start "bun run src/index.ts" --name "gopasal-backend"
-    pm2 save 2>/dev/null || true
-  else
-    pkill -f "bun run src/index.ts" 2>/dev/null || true
-    fuser -k 3000/tcp 2>/dev/null || true
-    nohup bun run src/index.ts > /var/log/gopasal-backend.log 2>&1 &
-  fi
-  cd ..
   sleep 3
 fi
 
