@@ -1,0 +1,167 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1770821101965,
+      "tag": "0000_woozy_thunderbolt",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1770822018503,
+      "tag": "0001_heavy_joshua_kane",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770822329773,
+      "tag": "0002_tiresome_selene",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1770822531024,
+      "tag": "0003_purple_pestilence",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1770824638334,
+      "tag": "0004_clear_joshua_kane",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1770824891674,
+      "tag": "0005_colorful_doctor_doom",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1770825446670,
+      "tag": "0006_tiresome_anita_blake",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1770826524153,
+      "tag": "0008_amusing_gressill",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1770826617782,
+      "tag": "0009_tough_shooting_star",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1770875068960,
+      "tag": "0010_soft_sharon_carter",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1775076009156,
+      "tag": "0011_review_owner_reply",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1775089504132,
+      "tag": "0012_aberrant_namor",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1775250850133,
+      "tag": "0013_watery_lorna_dane",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1775366400000,
+      "tag": "0014_merchant_self_fulfillment",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1775452800000,
+      "tag": "0015_order_commission_snapshot",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1775539200000,
+      "tag": "0016_store_parent_branch",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1775625600000,
+      "tag": "0017_store_staff_roles_announcements",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1775702400000,
+      "tag": "0018_repair_stores_parent_store_id",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1775788800000,
+      "tag": "0019_gopasal_customer_seller_tiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1775875200000,
+      "tag": "0020_platform_fulfillment_type",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1782111951284,
+      "tag": "0020_steady_riptide",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1782200000000,
+      "tag": "0021_payment_webhook_providers",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1782210000000,
+      "tag": "0022_search_vector_column",
+      "breakpoints": true
+    }
+  ]
+}
