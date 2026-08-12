@@ -27,7 +27,12 @@ if command -v docker &> /dev/null && [ -f "../docker-compose.yml" ]; then
   cd backend
 fi
 
-# 3. Kill any stale process on port 3000
+# 3. Ensure database migrations and initial seed are populated
+echo "🗄️ Verifying Database Schema & Initial Data..."
+bun run src/db/migrate.ts 2>/dev/null || true
+bun run src/db/seed.ts 2>/dev/null || true
+
+# 4. Kill any stale process on port 3000
 echo "🧹 Cleaning up port 3000..."
 fuser -k 3000/tcp 2>/dev/null || true
 pkill -f "bun run src/index.ts" 2>/dev/null || true
